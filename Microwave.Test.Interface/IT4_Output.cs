@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace Microwave.Test.Interface
 {
-    public class Class1
+    [TestFixture]
+    public class IT4_Output
     {
     }
 }
