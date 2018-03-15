@@ -33,8 +33,8 @@ namespace MicrowaveOvenClasses.Controllers
             myDisplay = display;
             myPowerTube = powerTube;
 
-            timer.Expired += new EventHandler(OnTimerExpired);
-            timer.TimerTick += new EventHandler(OnTimerTick);
+            myTimer.Expired += new EventHandler(OnTimerExpired);
+            myTimer.TimerTick += new EventHandler(OnTimerTick);
         }
 
         public void StartCooking(int power, int time)
@@ -64,7 +64,7 @@ namespace MicrowaveOvenClasses.Controllers
         public void OnTimerTick(object sender, EventArgs e)
         {
             int remaining = myTimer.TimeRemaining;
-            myDisplay.ShowTime((remaining/1000)/60, (remaining/1000) % 60);
+            myDisplay.ShowTime(remaining/60, remaining % 60);
         }
     }
 }

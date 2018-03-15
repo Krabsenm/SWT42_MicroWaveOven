@@ -39,26 +39,26 @@ namespace Microwave.Test.Interface
             _cookController = new CookController(_timer,_display,_powerTube, _userInterface);
         }
 
-        [TestCase(5, 1000)]
-        [TestCase(5, 3000)]
-        [TestCase(5, 20000)]
+        [TestCase(5, 1)]
+        [TestCase(5, 3)]
+        [TestCase(5, 20)]
         public void ControllerStartCooking_TimerStarted_Test(int power, int timer)
         {
             _cookController.StartCooking(power,timer);
             Assert.That(_timer.TimeRemaining, Is.EqualTo(timer));
         }
 
-        [TestCase(5, 1000)]
-        [TestCase(5, 3000)]
-        [TestCase(5, 20000)]
+        [TestCase(5, 1)]
+        [TestCase(5, 3)]
+        [TestCase(5, 20)]
         public void ControllerStartCooking_PowerTurnOn_Test(int power, int timer)
         {
             _cookController.StartCooking(power, timer);
             _output.Received().OutputLine($"PowerTube works with {power} %");
         }
 
-        [TestCase(5, 2000, 1300, 1)]
-        [TestCase(5, 5000, 3300, 3)]
+        [TestCase(5, 2, 1300, 1)]
+        [TestCase(5, 5, 3300, 3)]
         public void ControllerStartCooking_TimerTicksCorrectly_Test(int power, int timer, int waitTime, int expectedTicks)
         {
             ManualResetEvent pause = new ManualResetEvent(false);
@@ -70,8 +70,8 @@ namespace Microwave.Test.Interface
             Assert.That(ticks, Is.EqualTo(expectedTicks));
         }
 
-        [TestCase(5, 2000, 1300, 1)]
-        [TestCase(5, 5000, 3300, 3)]
+        [TestCase(5, 2, 1300, 1)]
+        [TestCase(5, 5, 3300, 3)]
         public void ControllerStartCooking_displayShowtime_Test(int power, int timer, int waitTime, int expectedTicks)
         {
             ManualResetEvent pause = new ManualResetEvent(false);
@@ -80,7 +80,7 @@ namespace Microwave.Test.Interface
 
             _cookController.StartCooking(power, timer);
             pause.WaitOne(waitTime);
-            _output.Received().OutputLine(Arg.Is<string>(str => str.Contains("00:0" + ((timer/1000)-ticks).ToString())));
+            _output.Received().OutputLine(Arg.Is<string>(str => str.Contains("00:0" + (timer-ticks).ToString())));
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Microwave.Test.Interface
             bool expired = false;
             _timer.Expired += (sender, args) => expired = true;
 
-            _cookController.StartCooking(5, 2000);
+            _cookController.StartCooking(5, 2);
             pause.WaitOne(2100);
             Assert.That(expired, Is.EqualTo(true));
         }
@@ -100,7 +100,7 @@ namespace Microwave.Test.Interface
         {
             ManualResetEvent pause = new ManualResetEvent(false);
 
-            _cookController.StartCooking(5, 2000);
+            _cookController.StartCooking(5, 2);
             pause.WaitOne(2100);
             _userInterface.Received().CookingIsDone();
         }
@@ -108,7 +108,7 @@ namespace Microwave.Test.Interface
         [Test]
         public void ControllerStartCooking_PowerTubeTurnOn_Test()
         {
-            _cookController.StartCooking(5, 2000);
+            _cookController.StartCooking(5, 2);
             _output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"PowerTube works with {5} %")));
         }
 
@@ -117,7 +117,7 @@ namespace Microwave.Test.Interface
         {
             ManualResetEvent pause = new ManualResetEvent(false);
 
-            _cookController.StartCooking(5, 2000);
+            _cookController.StartCooking(5, 2);
             pause.WaitOne(2100);
             _output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"PowerTube turned off")));
         }
@@ -127,7 +127,7 @@ namespace Microwave.Test.Interface
         {
             ManualResetEvent pause = new ManualResetEvent(false);
 
-            _cookController.StartCooking(5, 2000);
+            _cookController.StartCooking(5, 2);
             _cookController.Stop();
             _output.Received().OutputLine(Arg.Is<string>(str => str.Contains($"PowerTube turned off")));
         }
