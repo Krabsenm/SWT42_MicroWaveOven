@@ -57,6 +57,38 @@ namespace Microwave.Test.Interface
             _output.Received().OutputLine($"PowerTube works with {power} %");
         }
 
+        [Test]
+        public void ControllerStartCooking_PowerTurnOn_AllreadyOn(int power, int timer)
+        {
+            _powerTube.TurnOn(20);
+
+            try
+            {
+                _cookController.StartCooking(power, timer);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                
+                Assert.That(e.Message,Is.EqualTo("PowerTube.TurnOn: is already on"));
+            }
+        }
+
+
+        [Test]
+        public void ControllerStartCooking_PowerTurnOn_invalidPower(int power, int timer)
+        {
+            try
+            {
+                _cookController.StartCooking(power, timer);
+            }
+            catch (ApplicationException e)
+            {
+                Assert.That(e.Message, Is.EqualTo("power" + power + "Must be between 1 and 100 % (incl.)"));
+            }
+        }
+
+
+
         [TestCase(5, 2, 1300, 1)]
         [TestCase(5, 5, 3300, 3)]
         public void ControllerStartCooking_TimerTicksCorrectly_Test(int power, int timer, int waitTime, int expectedTicks)
