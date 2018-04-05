@@ -11,34 +11,67 @@ namespace MicroWareOven.Application
     {
         static void Main(string[] args)
         {
-            var microwave = new MicrowaveOven();
-            ManualResetEvent pause = new ManualResetEvent(false);
+            var Microwave = new MicrowaveOven();
+            ConsoleKeyInfo cki;
 
-            // The user opens the door
+            Console.Write("Microwave key guide:\n" +
+                          "O - Open door\n" +
+                          "C - Close door\n" +
+                          "P - Power button press\n" +
+                          "T - Time button press\n" +
+                          "S - Start/cancel button press\n" +
+                          "H - Hey guide\n" +
+                          "Esc - Close program\r\n");
 
-            microwave._door.Open();
+            do
+            {
+                cki = Console.ReadKey(true);
 
-            //The user closes the door
-            microwave._door.Close();
+                switch (cki.Key)
+                {
+                    case ConsoleKey.O:
+                        Console.WriteLine("\nOpening door");
+                        Microwave.Door.Open();
+                        break;
 
-            //user sets power
-            
-           microwave._powerButton.Press();
-           
+                    case ConsoleKey.C:
+                        Console.WriteLine("\nClosing door");
+                        Microwave.Door.Close();
+                        break;
 
-            //user sets time
-            microwave._timeButton.Press();
-            
-            //user press start/cancel button
-            microwave._startCancelButton.Press();
+                    case ConsoleKey.P:
+                        Console.WriteLine("\nPower button pressed");
+                        Microwave.PowerButton.Press();
+                        break;
 
-            pause.WaitOne(10000);
+                    case ConsoleKey.T:
+                        Console.WriteLine("\nTime button pressed");
+                        Microwave.TimeButton.Press();
+                        break;
 
-            // user opens door while running
-            microwave._door.Open();
+                    case ConsoleKey.S:
+                        Console.WriteLine("\nStart/cancel button pressed");
+                        Microwave.StartCancelButton.Press();
+                        break;
 
-            // user opens door while running
-            microwave._startCancelButton.Press();
+                    case ConsoleKey.H:
+                        Console.Write("\nMicrowave key guide:\n" +
+                                      "O - Open door\n" +
+                                      "C - Close door\n" +
+                                      "P - Power button press\n" +
+                                      "T - Time button press\n" +
+                                      "S - Start/cancel button press\n" +
+                                      "Esc - Close program\r\n");
+                        break;
+
+                    case ConsoleKey.Escape:
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid Input - Press H to open Key Guide");
+                        break;
+                }
+            } while (cki.Key != ConsoleKey.Escape);
         }
     }
 }

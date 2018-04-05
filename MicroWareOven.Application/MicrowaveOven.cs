@@ -11,36 +11,36 @@ namespace MicroWareOven.Application
 {
     class MicrowaveOven
     {
-       public  IOutput _output;
-       public  IDoor _door;
-       public  ILight _light;
-       public  IDisplay _display;
-       public  ITimer _timer;
-       public  IPowerTube _powerTube;
+       public  IOutput Output;
+       public  IDoor Door;
+       public  ILight Light;
+       public  IDisplay Display;
+       public  ITimer Timer;
+       public  IPowerTube PowerTube;
  
-       public  IButton _powerButton;
-       public  IButton _timeButton;
-       public  IButton _startCancelButton;
+       public  IButton PowerButton;
+       public  IButton TimeButton;
+       public  IButton StartCancelButton;
  
-       public  ICookController _cookController;
-       public  IUserInterface _userInterface;
+       public  ICookController CookController;
+       public  IUserInterface UserInterface;
 
         public MicrowaveOven()
         {
-            _output = new Output();
-            _door = new Door();
-            _light = new Light(_output);
-            _display = new Display(_output);
-            _timer = new Timer();
-            _powerTube = new PowerTube(_output);
+            Output = new Output();
+            Door = new Door();
+            Light = new Light(Output);
+            Display = new Display(Output);
+            Timer = new Timer();
+            PowerTube = new PowerTube(Output);
 
-            _powerButton = new Button();
-            _timeButton = new Button();
-            _startCancelButton = new Button();
+            PowerButton = new Button();
+            TimeButton = new Button();
+            StartCancelButton = new Button();
 
-            _cookController = new CookController(_timer, _display, _powerTube);
-            _userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
-            ((CookController)_cookController).UI = _userInterface;
+            CookController = new CookController(Timer, Display, PowerTube);
+            UserInterface = new UserInterface(PowerButton, TimeButton, StartCancelButton, Door, Display, Light, CookController);
+            ((CookController)CookController).UI = UserInterface;
         }
 
     }
