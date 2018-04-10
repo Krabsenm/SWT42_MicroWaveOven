@@ -47,7 +47,7 @@ namespace Microwave.Test.Unit
             uut.TurnOn(50);
             Assert.Throws<System.ApplicationException>(() => uut.TurnOn(60));
         }
-
+        //
         [Test]
         public void TurnOn_NegativePower_ThrowsException()
         {
