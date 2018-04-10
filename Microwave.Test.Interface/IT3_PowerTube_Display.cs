@@ -14,7 +14,7 @@ using Timer = MicrowaveOvenClasses.Boundary.Timer;
 namespace Microwave.Test.Interface
 {
     [TestFixture]
-    public class IT3_UserInterface
+    public class IT3_PowerTube_Display
     {
         private IOutput _output;
         private IDoor _door;
@@ -51,7 +51,8 @@ namespace Microwave.Test.Interface
 
             //also reals!!!
             _cookController = new CookController(_timer, _display, _powerTube);
-            _userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
+            _userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light,
+                _cookController);
             ((CookController) _cookController).UI = _userInterface;
         }
 
@@ -199,69 +200,7 @@ namespace Microwave.Test.Interface
             _output.Received().OutputLine(Arg.Is<string>(str =>
                 str.Contains("PowerTube turned off")));
         }
-
-
-/********************************************************************************/
-
-
-
-        [Test]
-        public void StartCookingTest_StartCooking_PowerTubeTurnOn()
-        {
-            _powerButton.Press();
-            _timeButton.Press();
-            _startCancelButton.Press();
-
-            _output.Received().OutputLine(Arg.Is<string>(str =>
-                str.ToLower().Contains("powertube") &&
-                str.ToLower().Contains("50 %")
-            ));
-        }
-
-        [Test]
-        public void StartCookingTest_StartCookingAndWaitCookingIsDoneCalled_PowerTubeTurnOff()
-        {
-            ManualResetEvent pause = new ManualResetEvent(false);
-            _powerButton.Press();
-            _timeButton.Press();
-            _startCancelButton.Press();
-
-            pause.WaitOne(62000);
-
-            _output.Received().OutputLine(Arg.Is<string>(str =>
-                str.ToLower().Contains("powertube") &&
-                str.ToLower().Contains("off")
-            ));
-        }
-
-        [Test]
-        public void StopCookingTest_StartCookingOpenDoor_PowerTubeTurnOff()
-        {
-            _powerButton.Press();
-            _timeButton.Press();
-            _startCancelButton.Press();
-
-            _door.Open();
-
-            _output.Received().OutputLine(Arg.Is<string>(str =>
-                str.ToLower().Contains("powertube") &&
-                str.ToLower().Contains("off")
-            ));
-        }
-
-        [Test]
-        public void StopCookingTest_StartCookingPressCancel_PowerTubeTurnOff()
-        {
-            _powerButton.Press();
-            _timeButton.Press();
-            _startCancelButton.Press();
-
-            _startCancelButton.Press();
-
-            _output.Received().OutputLine(Arg.Is<string>(str =>
-                str.ToLower().Contains("powertube") &&
-                str.ToLower().Contains("off")
-            ));
-        }
     }
 }
+
+/********************************************************************************/
