@@ -94,7 +94,6 @@ namespace Microwave.Test.Interface
         [Test]
         public void DisplayToOutput_DisplayCleared_OutputLine()
         {
-
             //assign
            
             //Used to redirect Console output
