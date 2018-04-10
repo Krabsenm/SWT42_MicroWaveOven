@@ -85,5 +85,39 @@ namespace Microwave.Test.Interface
 
             _output.Received().OutputLine(Arg.Is<string>(str => str.Contains("Display cleared")));
         }
+
+        [Test]
+        public void Timer_DoorOpenToStopTimer_TimerStopped()
+        {
+            ManualResetEvent pause = new ManualResetEvent(false);
+
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            pause.WaitOne(1100);
+            _door.Open();
+            pause.WaitOne(1100);
+
+            _output.Received().OutputLine(Arg.Is<string>(str => str.Contains("00:59")));
+            _output.DidNotReceive().OutputLine(Arg.Is<string>(str => str.Contains("00:58")));
+        }
+
+        [Test]
+        public void Timer_CancelPressedToStopTimer_TimerStopped()
+        {
+            ManualResetEvent pause = new ManualResetEvent(false);
+
+            _powerButton.Press();
+            _timeButton.Press();
+            _startCancelButton.Press();
+
+            pause.WaitOne(1100);
+            _startCancelButton.Press();
+            pause.WaitOne(1100);
+
+            _output.Received().OutputLine(Arg.Is<string>(str => str.Contains("00:59")));
+            _output.DidNotReceive().OutputLine(Arg.Is<string>(str => str.Contains("00:58")));
+        }
     }
 }
