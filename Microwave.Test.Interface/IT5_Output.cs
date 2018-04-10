@@ -51,6 +51,7 @@ namespace Microwave.Test.Interface
             //assign
             //Used to redirect Console output
             var sw = new StringWriter();
+            _light.TurnOn(); // go to turned on state
             Console.SetOut(sw); //Redirect
 
             //act
@@ -81,13 +82,15 @@ namespace Microwave.Test.Interface
             //assign
             //Used to redirect Console output
             var sw = new StringWriter();
+            _powerTube.TurnOn(50); // go to turned on state 
             Console.SetOut(sw); //Redirect
+
 
             //act
             _powerTube.TurnOff();
 
             //assert
-            Assert.That(sw.ToString(), Is.EqualTo("PowerTube turned offf\r\n"));
+            Assert.That(sw.ToString(), Is.EqualTo("PowerTube turned off\r\n"));
         }
 
 
