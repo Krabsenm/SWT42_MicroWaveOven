@@ -56,9 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IT1_ButtonDoor.cs" />
+    <Compile Include="IT2_LightCookController - Copy.cs" />
     <Compile Include="IT4_Output.cs" />
     <Compile Include="IT3_UserInterface.cs" />
-    <Compile Include="IT2_UserInterfaceStubbedCookController.cs" />
+    <Compile Include="IT2_LightCookController.cs" />
     <Compile Include="IT1_CookController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
