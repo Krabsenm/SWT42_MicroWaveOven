@@ -54,7 +54,7 @@ namespace Microwave.Test.Interface
             Console.SetOut(sw); //Redirect
 
             //act
-            _light.TurnOn();
+            _light.TurnOff();
 
             //assert
             Assert.That(sw.ToString(), Is.EqualTo("Light is turned off\r\n"));
@@ -87,7 +87,7 @@ namespace Microwave.Test.Interface
             _powerTube.TurnOff();
 
             //assert
-            Assert.That(sw.ToString(), Is.EqualTo("PowerTube works with 50 %\r\n"));
+            Assert.That(sw.ToString(), Is.EqualTo("PowerTube turned offf\r\n"));
         }
 
 
