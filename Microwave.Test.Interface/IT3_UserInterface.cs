@@ -33,21 +33,177 @@ namespace Microwave.Test.Interface
         [SetUp]
         public void Setup()
         {
+            // fakes!!
             _output = Substitute.For<IOutput>();
-            _door = new Door();
-            _light = new Light(_output);
+            _timer = Substitute.For<ITimer>();
+            _light = Substitute.For<ILight>();
+
+            // reals!!!
             _display = new Display(_output);
-            _timer = new Timer();
             _powerTube = new PowerTube(_output);
 
+
+            // drivers!!!
+            _door = new Door();
             _powerButton = new Button();
             _timeButton = new Button();
             _startCancelButton = new Button();
 
+            //also reals!!!
             _cookController = new CookController(_timer, _display, _powerTube);
             _userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
             ((CookController) _cookController).UI = _userInterface;
         }
+
+
+        /******************************************************************
+         *                Door Opens Test
+         * 
+         ******************************************************************/
+        [Test]
+        public void DoorOpens_CookingState_PowerTube_TurnOff()
+        {
+
+            //assign
+            _powerButton.Press(); // go to setpower state
+            _timeButton.Press(); // go to settime state
+            _startCancelButton.Press(); // go to cooking state.
+            _output.ClearReceivedCalls();
+
+            //act
+            _door.Open();
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube turned off")));
+        }
+
+        [Test]
+        public void DoorOpens_CookingState_Display_Cleared()
+        {
+
+            //assign
+            _powerButton.Press(); // go to setpower state
+            _timeButton.Press(); // go to settime state
+            _startCancelButton.Press(); // go to cooking state.
+            _output.ClearReceivedCalls();
+
+            //act
+            _door.Open();
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+        }
+
+        /******************************************************************
+         *                Display Tests
+         * 
+         ******************************************************************/
+
+        [Test]
+        public void PowerButtonPressed_ShowPower_DisplaysPowerLevel()
+        {
+            //assign
+            _powerButton.Press();
+            _output.ClearReceivedCalls();
+
+            //act
+            _powerButton.Press(); //sets power to 100  
+
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display shows: 100 W")));
+        }
+
+
+        [Test]
+        public void OnTimeButtonPressed_ShowTime_DisplaysTime()
+        {
+
+            //assign
+            _powerButton.Press(); // go to setpower state
+            _timeButton.Press(); // go to settime state
+            _output.ClearReceivedCalls();
+
+
+            //act
+            _timeButton.Press(); // set time to 02:00 mins. 
+
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display shows: 02:00")));
+        }
+
+
+        [Test]
+        public void OnStartCancelPressed_CookingState_Display_cleared()
+        {
+
+            //assign
+            _powerButton.Press(); // go to setpower state
+            _timeButton.Press(); // go to settime state
+            _startCancelButton.Press(); // go to cooking state. 
+            _output.ClearReceivedCalls();
+
+
+            //act
+            _startCancelButton.Press(); // go to ready state. 
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("Display cleared")));
+        }
+
+        /******************************************************************
+         *                PowerTube Tests
+         * 
+         ******************************************************************/
+
+        [Test]
+        public void OnStartCancelPressed_OnStartCancelPressed_PowerTube_TurnOn()
+        {
+
+            //assign
+            _powerButton.Press(); // go to setpower state
+            _timeButton.Press(); // go to settime state
+            _output.ClearReceivedCalls();
+
+
+            //act
+            _startCancelButton.Press(); // go to cooking state. 
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube works with 50 %")));
+        }
+
+
+        [Test]
+        public void OnStartCancelPressed_CookingState_PowerTube_TurnOff()
+        {
+
+            //assign
+            _powerButton.Press(); // go to setpower state
+            _timeButton.Press(); // go to settime state
+            _startCancelButton.Press(); // go to cooking state. 
+            _output.ClearReceivedCalls();
+
+
+            //act
+            _startCancelButton.Press(); // go to ready state. 
+
+            //assert
+            _output.Received().OutputLine(Arg.Is<string>(str =>
+                str.Contains("PowerTube turned off")));
+        }
+
+
+/********************************************************************************/
+
+
 
         [Test]
         public void StartCookingTest_StartCooking_PowerTubeTurnOn()
